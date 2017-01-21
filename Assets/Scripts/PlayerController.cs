@@ -20,6 +20,8 @@ public class PlayerController : MonoBehaviour
     private float intervalCheckTime = 2f;
 
 
+    private const float velocityDeath = 0.01f;
+
     private Vector3 velocity;
     private Vector3 lastPosition;
 
@@ -41,15 +43,42 @@ public class PlayerController : MonoBehaviour
 
         if(Mathf.Sign(lastVelocity.x) != Mathf.Sign(velocity.x))
         {
-            StartCoroutine(CountShift());
+            StartCoroutine(Coroutine_CountShift());
             if (OnShiftHappens != null)
                 OnShiftHappens.Invoke();
         }
 
+        if (velocity.magnitude < velocityDeath)
+            StartCoroutine(Coroutine_CheckIfPlayerStandsStill());
+
         lastPosition = transform.position;
 	}
 
-    private IEnumerator CountShift()
+    private IEnumerator Coroutine_CheckIfPlayerStandsStill()
+    {
+        yield return null;
+        if (velocity.magnitude < velocityDeath)
+        {
+            yield return null;
+            if (velocity.magnitude < velocityDeath)
+            {
+                yield return null;
+                if (velocity.magnitude < velocityDeath)
+                {
+                    yield return null;
+                    if (velocity.magnitude < velocityDeath)
+                    {
+                        shifts = 0;
+                        if (OnNoShiftHappens != null)
+                            OnNoShiftHappens.Invoke();
+                    }
+                }
+            }
+        }
+    }
+            
+
+    private IEnumerator Coroutine_CountShift()
     {
         shifts++;
         yield return new WaitForSeconds(intervalCheckTime);
@@ -60,5 +89,8 @@ public class PlayerController : MonoBehaviour
             if (OnNoShiftHappens != null)
                 OnNoShiftHappens.Invoke();
         }
+
+        if (shifts < 0)
+            shifts = 0;
     }
 }

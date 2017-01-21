@@ -13,12 +13,14 @@ public class PlayerController : MonoBehaviour
     }
 
     public int shifts;
+    public float floatshifts;
 
     [SerializeField]
     private float speed;
     [SerializeField]
     private float intervalCheckTime = 2f;
-
+    private float floatIncrease = 10f;
+    private float floatDecrease = 5f;
 
     private const float velocityDeath = 0.01f;
     private float yRotation;
@@ -33,6 +35,7 @@ public class PlayerController : MonoBehaviour
     private void Start()
     {
         lastPosition = transform.position;
+
     }
 
 	void Update()
@@ -51,11 +54,20 @@ public class PlayerController : MonoBehaviour
 
         if (velocity.magnitude < velocityDeath)
             StartCoroutine(Coroutine_CheckIfPlayerStandsStill());
-
+        
         lastPosition = transform.position;
 
         // RotateInInputDirection();
-	}
+        
+        if (Mathf.Sign(lastVelocity.x) != Mathf.Sign(velocity.x) && floatshifts < 10) {
+            floatshifts += 10.0f/floatIncrease * Time.deltaTime * 3;
+        }
+        if (floatshifts > 0.1){
+            floatshifts -= 1.0f/floatDecrease * Time.deltaTime;
+            if (floatshifts < 0)
+                floatshifts = 0;
+        }
+    }
 
     private void RotateInInputDirection()
     {
@@ -87,6 +99,7 @@ public class PlayerController : MonoBehaviour
                     if (velocity.magnitude < velocityDeath)
                     {
                         shifts = 0;
+                        floatshifts = 0f;
                         if (OnNoShiftHappens != null)
                             OnNoShiftHappens.Invoke();
                     }

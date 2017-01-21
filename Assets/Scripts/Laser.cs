@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
 [RequireComponent(typeof(MeshFilter))]
 public class Laser : MonoBehaviour
 {
@@ -145,6 +146,9 @@ public class Laser : MonoBehaviour
         normals.Push(-Vector3.forward);
         colors.Push(currentLaserColor);
     }
+    static float normalizationValue = 10f; // maximum value that may be held (/will be accounted for) in the player.shifts variable
+
+    static float NORMALIZED_THIRD = normalizationValue/3f;
 
     private void SetLaserColor()
     {
@@ -153,45 +157,39 @@ public class Laser : MonoBehaviour
         float blue = 0;
         float alpha = 1;
         
-        float normalization = 10; // maximum value that may be held (/will be accounted for) in the player.shifts variable
-
-        float normalizedShift = player.shifts/normalization;
-
+        float normalizedShift = player.floatshifts/normalizationValue;
         // calculate red based on normalization
-        if (normalizedShift == 0f)
-        {
-            red = 0f;
-        }
-        else
-        if (normalizedShift < 0.2)
+        if (normalizedShift < 0.01) {
+            red = 0;
+        } else if (normalizedShift < 0.2)
         {
             red = 1; 
-        } else if (normalizedShift < 0.4){
-            red = (0.4f - normalizedShift) * 5 / 2;
-        } else if (normalizedShift < 0.8){
+        } else if (normalizedShift < 0.5){
+            red = Mathf.Cos((normalizedShift - 0.2f) * NORMALIZED_THIRD * Mathf.PI / 2);
+        } else if (normalizedShift < 0.7){
             red = 0;
         } else if (normalizedShift < 1.0){
-            red = (normalizedShift - 0.8f) * 5 * 0.75f;
+            red = (1-Mathf.Cos((normalizedShift - 0.7f) * NORMALIZED_THIRD * 0.75f * Mathf.PI / 2));
         } else {
             red = 0.75f;
         }
 
         // calculate green
         if (normalizedShift < 0.2){
-            green = ((float) normalizedShift) * 5 / 2;
+            green = 1 - Mathf.Cos(normalizedShift * 5 * Mathf.PI / 2);
         } else if (normalizedShift < 0.6){
             green = 1;
-        } else if (normalizedShift < 0.8){
-            green = (0.8f - normalizedShift) * 5;
+        } else if (normalizedShift < 0.9){
+            green = Mathf.Cos((normalizedShift - 0.6f) * NORMALIZED_THIRD * Mathf.PI / 2);
         } else {
             green = 0;
         }
 
         // calculate blue
-        if (normalizedShift < 0.4){
+        if (normalizedShift < 0.3){
             blue = 0;
         } else if (normalizedShift < 0.6){
-            blue = (normalizedShift - 0.4f) * 5 / 2;
+            blue = 1 - Mathf.Cos((normalizedShift - 0.3f) * NORMALIZED_THIRD * Mathf.PI / 2);
         } else {
             blue = 1;
         }

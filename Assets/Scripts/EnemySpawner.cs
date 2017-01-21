@@ -33,17 +33,19 @@ public class EnemySpawner : MonoBehaviour
         pos.y = Random.Range(spawnPointCenter.y - spawnBoxSize.y * 0.5f, spawnPointCenter.y + spawnBoxSize.y * 0.5f);
 
         Enemy lastEnemy = null;
+
+        float speed = Random.Range(0.8f, 1.2f);
         int EnemyCount = Random.Range(0, 4);
         for (int i = EnemyCount; i > 0; i--)
         {
-            lastEnemy = InstantiateEnemy(pos, i, lastEnemy);
+            lastEnemy = InstantiateEnemy(pos, i, lastEnemy, speed);
         }
     }
 
-    private Enemy InstantiateEnemy(Vector3 position, int layer, Enemy parent)
+    private Enemy InstantiateEnemy(Vector3 position, int layer, Enemy parent, float speed)
     {
         Enemy enemy = GameObject.Instantiate(enemyPrefab, position, Quaternion.identity).GetComponent<Enemy>();
-        enemy.Init(parent, layer);
+        enemy.Init(parent, layer, speed);
 
         return enemy;
     }

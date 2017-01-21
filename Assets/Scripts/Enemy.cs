@@ -34,7 +34,7 @@ public class Enemy : MonoBehaviour
         transform.localScale = defaultScale + (Vector3.one * 0.1f * Mathf.Sin(Time.time * damageScaler));
 	}
 
-    public void Init(Enemy parent, int layer)
+    public void Init(Enemy parent, int layer, float speed)
     {
         parentEnemy = parent;
 
@@ -47,7 +47,7 @@ public class Enemy : MonoBehaviour
         GetComponent<SpriteRenderer>().sortingOrder = 5 - layer;
 
         rotationSpeed = Random.Range(45f, 200f);
-
+        this.speed = speed;
         // sign
         rotationSpeed = Random.Range(0, 2) == 0 ? -rotationSpeed : rotationSpeed;
 

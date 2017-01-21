@@ -102,12 +102,6 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(intervalCheckTime);
         shifts--;
 
-        if (shifts == 0)
-        {
-            if (OnNoShiftHappens != null)
-                OnNoShiftHappens.Invoke();
-        }
-
         if (shifts < 0)
             shifts = 0;
     }

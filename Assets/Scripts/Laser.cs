@@ -9,7 +9,7 @@ public class Laser : MonoBehaviour
     private Transform origin;
 
     [SerializeField]
-    private const int bufferSize = 500;
+    private const int bufferSize = 200;
 
     [SerializeField]
     private float speed = 10f;
@@ -25,6 +25,10 @@ public class Laser : MonoBehaviour
     [Range(1, 10)]
     private float colorFactorMultiplier;
 
+    [Header("Wobble FX")]
+    public float wobbleStrength = 0.5f;
+    public float wobbleSpeed = 10f;
+
     private float widthHalfed;
 
     private MeshFilter filter;
@@ -32,6 +36,7 @@ public class Laser : MonoBehaviour
 
     private CircularBuffer<Vector3> velocities;
     private CircularBuffer<Vector3> vertices;
+    private CircularBuffer<Vector3> normals;
     private CircularBuffer<int> triangles;
     private CircularBuffer<Color> colors;
 
@@ -50,36 +55,62 @@ public class Laser : MonoBehaviour
         player = FindObjectOfType<PlayerController>();
         player.OnShiftHappens += SetLaserColor;
         player.OnNoShiftHappens += SetLaserColor;
+
+
         if (origin == null)
         {
             Debug.LogWarning("Origin was left blank, using origin of this GameObject instead!");
             origin = transform;
         }
 
-        widthHalfed = width * 0.5f;
-        velocities = new CircularBuffer<Vector3>(bufferSize);
-        vertices = new CircularBuffer<Vector3>(bufferSize);
-        colors = new CircularBuffer<Color>(bufferSize);
+        // SetupParticleSystem();
+        InitializeBuffers();
 
+        widthHalfed = width * 0.5f;
+        
         triangles = new CircularBuffer<int>((bufferSize-2) * 3);
+
+        StartCoroutine(Coroutine_Wobble());
 	}
 
-    public void Update()
+    private void InitializeBuffers()
+    {
+        velocities = new CircularBuffer<Vector3>(bufferSize);
+        vertices = new CircularBuffer<Vector3>(bufferSize);
+        normals = new CircularBuffer<Vector3>(bufferSize);
+        colors = new CircularBuffer<Color>(bufferSize);
+    }
+
+    private void SetupParticleSystem()
+    {
+        ParticleSystem particles = GetComponentInChildren<ParticleSystem>();
+        if (particles != null)
+        {
+            ParticleSystem.ShapeModule shape = particles.shape;
+            shape.shapeType = ParticleSystemShapeType.Mesh;
+            shape.mesh = mesh;
+        }
+    }
+
+    private void Update()
     {
         ApplyVelocities();
         AddNewVertices();
     }
 
     public void AddNewVertices()
-    { 
-        AddVertex(origin.position - Vector3.right * widthHalfed);
+    {
+        float fatness = widthHalfed;
+
+        AddVertex(origin.position - Vector3.right * fatness);
         lastLeftIndex = vertices.IndexOfLastItemAdded;
 
-        AddVertex(origin.position + Vector3.right * widthHalfed);
+        AddVertex(origin.position + Vector3.right * fatness);
         lastRightIndex = vertices.IndexOfLastItemAdded;
 
         mesh.vertices = vertices.Content;
         mesh.triangles = triangles.Content;
+        mesh.normals = normals.Content;
         mesh.colors = colors.Content;
     }
 
@@ -95,6 +126,7 @@ public class Laser : MonoBehaviour
         }
 
         velocities.Push(player.Velocity * velocityInheritanceFactor + origin.forward * speed);
+        normals.Push(-Vector3.forward);
         colors.Push(currentLaserColor);
     }
 
@@ -162,4 +194,28 @@ public class Laser : MonoBehaviour
         }
     }
 
+    private IEnumerator Coroutine_Wobble()
+    {
+        float direction = 1f;
+        float t = 0;
+        while (true)
+        {
+            Vector3[] v = vertices.Content;
+
+            for (int i = 0; i < v.Length; i += 2)
+            {
+                v[i] += Vector3.right * Time.deltaTime * wobbleStrength * direction;
+                v[i + 1] += Vector3.left * Time.deltaTime * wobbleStrength * direction;
+            }
+
+            t += Time.deltaTime * wobbleSpeed;
+            if (t > 1)
+            {
+                direction = -direction;
+                t -= 1f;
+            }
+
+            yield return new WaitForEndOfFrame();
+        }
+    }
 }

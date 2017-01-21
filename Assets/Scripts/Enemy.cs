@@ -13,6 +13,8 @@ public class Enemy : MonoBehaviour
 {
     public EnemyColor color;
     public Enemy parentEnemy;
+
+    public int life = 1;
     public float baseScale = 0.5f;
     [Range(0.5f, 5f)]
     public float speed = 1f;
@@ -77,5 +79,21 @@ public class Enemy : MonoBehaviour
         {
             return parentEnemy.GetEnemyParentCount();
         }
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.GetComponent<LaserCollider>() != null)
+        {
+            life--;
+
+            if (life == 0)
+                DiePainfully();
+        }
+    }
+
+    private void DiePainfully()
+    {
+        Destroy(gameObject);
     }
 }

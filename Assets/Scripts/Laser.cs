@@ -9,7 +9,7 @@ public class Laser : MonoBehaviour
     private Transform origin;
 
     [SerializeField]
-    private const int bufferSize = 300;
+    private const int bufferSize = 500;
 
     [SerializeField]
     private float speed = 10f;
@@ -25,13 +25,17 @@ public class Laser : MonoBehaviour
 
     private MeshFilter filter;
     private Mesh mesh;
+
+    private CircularBuffer<Vector3> velocities;
     private CircularBuffer<Vector3> vertices;
     private CircularBuffer<int> triangles;
-    private CircularBuffer<Vector3> velocities;
-
-    private Vector3 lastPosition;
+    private CircularBuffer<Color> colors;
 
     private int lastLeftIndex, lastRightIndex;
+
+    private PlayerController player;
+    
+    private Color currentLaserColor = Color.black;
 
 	void Start ()
     {
@@ -39,17 +43,19 @@ public class Laser : MonoBehaviour
         filter = GetComponent<MeshFilter>();
         filter.mesh = mesh;
 
+        player = FindObjectOfType<PlayerController>();
+        player.OnShiftHappens += SetLaserColor;
         if (origin == null)
         {
             Debug.LogWarning("Origin was left blank, using origin of this GameObject instead!");
             origin = transform;
         }
 
-        lastPosition = origin.position;
-
         widthHalfed = width * 0.5f;
         velocities = new CircularBuffer<Vector3>(bufferSize);
         vertices = new CircularBuffer<Vector3>(bufferSize);
+        colors = new CircularBuffer<Color>(bufferSize);
+
         triangles = new CircularBuffer<int>((bufferSize-2) * 3);
 	}
 
@@ -57,12 +63,10 @@ public class Laser : MonoBehaviour
     {
         ApplyVelocities();
         AddNewVertices();
-
-        lastPosition = origin.position;
     }
 
     public void AddNewVertices()
-    {
+    { 
         AddVertex(origin.position - Vector3.right * widthHalfed);
         lastLeftIndex = vertices.IndexOfLastItemAdded;
 
@@ -71,6 +75,7 @@ public class Laser : MonoBehaviour
 
         mesh.vertices = vertices.Content;
         mesh.triangles = triangles.Content;
+        mesh.colors = colors.Content;
     }
 
     private void AddVertex(Vector3 vertex)
@@ -84,7 +89,28 @@ public class Laser : MonoBehaviour
             triangles.Push(lastRightIndex);
         }
 
-        velocities.Push((origin.position - lastPosition) * velocityInheritanceFactor + origin.forward * speed);
+        velocities.Push(player.Velocity * velocityInheritanceFactor + origin.forward * speed);
+        colors.Push(currentLaserColor);
+    }
+
+    private void SetLaserColor()
+    {
+        if (player.shifts < 1)
+        {
+            currentLaserColor = Color.black;
+        }
+        else if (player.shifts < 4)
+        {
+            currentLaserColor = Color.red;
+        }
+        else if (player.shifts < 8)
+        {
+            currentLaserColor = Color.green;
+        }
+        else
+        {
+            currentLaserColor = Color.blue;
+        }
     }
 
     private void ApplyVelocities()
@@ -96,4 +122,5 @@ public class Laser : MonoBehaviour
             v[i] = v[i] + velocities.Content[i] * Time.deltaTime;
         }
     }
+
 }

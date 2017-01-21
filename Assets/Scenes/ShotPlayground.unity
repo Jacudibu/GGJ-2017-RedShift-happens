@@ -462,4 +462,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   shifts: 0
   speed: 10
-  intervalCheckTime: 2
+  intervalCheckTime: 4

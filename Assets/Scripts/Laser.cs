@@ -110,6 +110,11 @@ public class Laser : MonoBehaviour
         float normalizedShift = player.shifts/normalization;
 
         // calculate red based on normalization
+        if (normalizedShift == 0f)
+        {
+            red = 0f;
+        }
+        else
         if (normalizedShift < 0.2)
         {
             red = 1; 

@@ -100,22 +100,51 @@ public class Laser : MonoBehaviour
 
     private void SetLaserColor()
     {
-        if (player.shifts < 1)
+        float red = 0;
+        float green = 0;
+        float blue = 0;
+        float alpha = 1;
+        
+        float normalization = 10; // maximum value that may be held (/will be accounted for) in the player.shifts variable
+
+        float normalizedShift = player.shifts/normalization;
+
+        // calculate red based on normalization
+        if (normalizedShift < 0.2)
         {
-            currentLaserColor = Color.black;
+            red = 1; 
+        } else if (normalizedShift < 0.4){
+            red = (0.4f - normalizedShift) * 5 / 2;
+        } else if (normalizedShift < 0.8){
+            red = 0;
+        } else if (normalizedShift < 1.0){
+            red = (normalizedShift - 0.8f) * 5 * 0.75f;
+        } else {
+            red = 0.75f;
         }
-        else if (player.shifts < 4)
-        {
-            currentLaserColor = Color.red;
+
+        // calculate green
+        if (normalizedShift < 0.2){
+            green = ((float) normalizedShift) * 5 / 2;
+        } else if (normalizedShift < 0.6){
+            green = 1;
+        } else if (normalizedShift < 0.8){
+            green = (0.8f - normalizedShift) * 5;
+        } else {
+            green = 0;
         }
-        else if (player.shifts < 8)
-        {
-            currentLaserColor = Color.green;
+
+        // calculate blue
+        if (normalizedShift < 0.4){
+            blue = 0;
+        } else if (normalizedShift < 0.6){
+            blue = (normalizedShift - 0.4f) * 5 / 2;
+        } else {
+            blue = 1;
         }
-        else
-        {
-            currentLaserColor = Color.blue;
-        }
+
+        // set currentLaserColor
+        currentLaserColor = new Color(red, green, blue, alpha);
     }
 
     private void ApplyVelocities()

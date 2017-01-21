@@ -25,6 +25,7 @@ public class PlayerController : MonoBehaviour
 
     public delegate void ShiftAction();
     public ShiftAction OnShiftHappens;
+    public ShiftAction OnNoShiftHappens;
 
     private void Start()
     {
@@ -53,5 +54,11 @@ public class PlayerController : MonoBehaviour
         shifts++;
         yield return new WaitForSeconds(intervalCheckTime);
         shifts--;
+
+        if (shifts == 0)
+        {
+            if (OnNoShiftHappens != null)
+                OnNoShiftHappens.Invoke();
+        }
     }
 }

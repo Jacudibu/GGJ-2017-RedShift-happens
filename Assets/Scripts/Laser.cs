@@ -45,6 +45,7 @@ public class Laser : MonoBehaviour
 
         player = FindObjectOfType<PlayerController>();
         player.OnShiftHappens += SetLaserColor;
+        player.OnNoShiftHappens += SetLaserColor;
         if (origin == null)
         {
             Debug.LogWarning("Origin was left blank, using origin of this GameObject instead!");

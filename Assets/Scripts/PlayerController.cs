@@ -95,7 +95,6 @@ public class PlayerController : MonoBehaviour
         }
     }
             
-
     private IEnumerator Coroutine_CountShift()
     {
         shifts++;

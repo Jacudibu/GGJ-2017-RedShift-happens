@@ -54,7 +54,7 @@ public class CircularBuffer<T>
         end = (end + 1) % size;
     }
 
-    public T Pop()
+    public T PopEnd()
     {
         if (end != start)
         {
@@ -64,6 +64,20 @@ public class CircularBuffer<T>
         else
         {
             return content[start];
+        }
+    }
+
+    public T PopStart()
+    {
+        if (end != start)
+        {
+            T result = content[start];
+            start = (start + 1 + size) % size;
+            return result;
+        }
+        else
+        {
+            return content[end];
         }
     }
 }

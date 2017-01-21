@@ -37,6 +37,7 @@ public class Laser : MonoBehaviour
     private CircularBuffer<Vector3> velocities;
     private CircularBuffer<Vector3> vertices;
     private CircularBuffer<Vector3> normals;
+    private CircularBuffer<Vector3> uvs;
     private CircularBuffer<int> triangles;
     private CircularBuffer<Color> colors;
 
@@ -96,6 +97,7 @@ public class Laser : MonoBehaviour
     {
         ApplyVelocities();
         AddNewVertices();
+        //SetupUVs();
     }
 
     public void AddNewVertices()
@@ -192,6 +194,22 @@ public class Laser : MonoBehaviour
         {
             v[i] = v[i] + velocities.Content[i] * Time.deltaTime;
         }
+    }
+
+    private void SetupUVs()
+    {
+        Vector2[] uv = new Vector2[bufferSize];
+        float stepSize = 1f / (bufferSize * 0.5f);
+
+        int step = 0;
+        for (int i = 0; i < bufferSize; i += 2)
+        {
+            uv[i] = new Vector2(0f, step * stepSize);
+            uv[i+1] = new Vector2(1, step * stepSize);
+            step++;
+        }
+
+        mesh.uv = uv;
     }
 
     private IEnumerator Coroutine_Wobble()

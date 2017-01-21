@@ -29,6 +29,14 @@ public class Laser : MonoBehaviour
     public float wobbleStrength = 0.5f;
     public float wobbleSpeed = 10f;
 
+    [Header("Collision Stuff")]
+    public bool spawnColliders = false;
+    public GameObject colliderPrefab;
+    private int redLayer;
+    private int greenLayer;
+    private int blueLayer;
+    public float colliderSpawnInterval;
+
     private float widthHalfed;
 
     private MeshFilter filter;
@@ -57,6 +65,9 @@ public class Laser : MonoBehaviour
         player.OnShiftHappens += SetLaserColor;
         player.OnNoShiftHappens += SetLaserColor;
 
+        redLayer = LayerMask.NameToLayer("RED");
+        greenLayer = LayerMask.NameToLayer("GREEN");
+        blueLayer = LayerMask.NameToLayer("BLUE");
 
         if (origin == null)
         {
@@ -72,6 +83,9 @@ public class Laser : MonoBehaviour
         triangles = new CircularBuffer<int>((bufferSize-2) * 3);
 
         StartCoroutine(Coroutine_Wobble());
+
+        if (spawnColliders)
+            StartCoroutine(Coroutine_CreateColliders());
 	}
 
     private void InitializeBuffers()
@@ -235,5 +249,49 @@ public class Laser : MonoBehaviour
 
             yield return new WaitForEndOfFrame();
         }
+    }
+
+    private IEnumerator Coroutine_CreateColliders()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(colliderSpawnInterval);
+
+            if (currentLaserColor == Color.black)
+            {
+                continue;
+            }
+            else if (currentLaserColor == Color.green)
+            {
+                SpawnCollider(EnemyColor.GREEN);
+            }
+            else if (currentLaserColor == Color.blue)
+            {
+                SpawnCollider(EnemyColor.BLUE);
+            }
+            else if (currentLaserColor == Color.red)
+            {
+                SpawnCollider(EnemyColor.RED);
+            }
+        }
+    }
+
+    private void SpawnCollider(EnemyColor color)
+    {
+        GameObject coll = GameObject.Instantiate(colliderPrefab, origin.position, Quaternion.identity);
+        switch (color)
+        {
+            case EnemyColor.BLUE:
+                coll.layer = blueLayer;
+                break;
+            case EnemyColor.RED:
+                coll.layer = redLayer;
+                break;
+            case EnemyColor.GREEN:
+                coll.layer = greenLayer;
+                break;
+        }
+
+        coll.GetComponent<LaserCollider>().Init(speed);
     }
 }

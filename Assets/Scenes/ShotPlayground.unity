@@ -3117,6 +3117,9 @@ MonoBehaviour:
   colorFactorMultiplier: 0
   wobbleStrength: 3
   wobbleSpeed: 20
+  spawnColliders: 0
+  colliderPrefab: {fileID: 0}
+  colliderSpawnInterval: 0
 --- !u!1 &954617267
 GameObject:
   m_ObjectHideFlags: 0
@@ -3268,6 +3271,10 @@ MonoBehaviour:
   colorFactorMultiplier: 0
   wobbleStrength: 0.1
   wobbleSpeed: 10
+  spawnColliders: 1
+  colliderPrefab: {fileID: 1770609007282760, guid: 3d7385ae2eb8aa74fac49a884c6e9ef5,
+    type: 2}
+  colliderSpawnInterval: 0.02
 --- !u!23 &1942937062
 MeshRenderer:
   m_ObjectHideFlags: 0

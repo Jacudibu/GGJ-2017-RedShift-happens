@@ -54,12 +54,15 @@ public class Enemy : MonoBehaviour
         {
             case EnemyColor.BLUE:
                 renderer.material.color = Color.blue;
+                gameObject.layer = LayerMask.NameToLayer("BLUE");
                 break;
             case EnemyColor.RED:
                 renderer.material.color = Color.red;
+                gameObject.layer = LayerMask.NameToLayer("RED");
                 break;
             case EnemyColor.GREEN:
                 renderer.material.color = Color.green;
+                gameObject.layer = LayerMask.NameToLayer("GREEN");
                 break;
         }
     }

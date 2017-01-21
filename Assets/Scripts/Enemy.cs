@@ -85,6 +85,11 @@ public class Enemy : MonoBehaviour
     {
         if (collision.gameObject.GetComponent<LaserCollider>() != null)
         {
+            Destroy(collision.gameObject);
+
+            if (parentEnemy != null)
+                return;
+
             life--;
 
             if (life == 0)

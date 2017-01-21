@@ -254,7 +254,8 @@ public class Laser : MonoBehaviour
         while (true)
         {
             yield return new WaitForSeconds(colliderSpawnInterval);
-
+            SpawnCollider(EnemyColor.GREEN);
+            /*
             if (currentLaserColor == Color.black)
             {
                 continue;
@@ -270,7 +271,7 @@ public class Laser : MonoBehaviour
             else if (currentLaserColor == Color.red)
             {
                 SpawnCollider(EnemyColor.RED);
-            }
+            }*/
         }
     }
 

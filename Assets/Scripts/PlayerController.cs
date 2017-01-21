@@ -60,7 +60,7 @@ public class PlayerController : MonoBehaviour
         // RotateInInputDirection();
         
         if (Mathf.Sign(lastVelocity.x) != Mathf.Sign(velocity.x) && floatshifts < 10) {
-            floatshifts += 10.0f/floatIncrease * Time.deltaTime * 3;
+            floatshifts += 10.0f/floatIncrease * Time.deltaTime * 10f;
         }
         if (floatshifts > 0.1){
             floatshifts -= 1.0f/floatDecrease * Time.deltaTime;

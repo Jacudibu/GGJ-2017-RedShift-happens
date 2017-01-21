@@ -34,7 +34,7 @@ public class EnemySpawner : MonoBehaviour
 
         Enemy lastEnemy = null;
         int EnemyCount = Random.Range(0, 4);
-        for (int i = 0; i < EnemyCount; i++)
+        for (int i = EnemyCount; i > 0; i--)
         {
             lastEnemy = InstantiateEnemy(pos, i, lastEnemy);
         }

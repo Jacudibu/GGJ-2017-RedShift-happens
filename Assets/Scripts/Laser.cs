@@ -21,6 +21,10 @@ public class Laser : MonoBehaviour
     [SerializeField]
     private float width = 10f;
 
+    [SerializeField]
+    [Range(1, 10)]
+    private float colorFactorMultiplier;
+
     private float widthHalfed;
 
     private MeshFilter filter;

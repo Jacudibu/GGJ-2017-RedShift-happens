@@ -3071,6 +3071,50 @@ MonoBehaviour:
   colorFactorMultiplier: 0
   wobbleStrength: 3
   wobbleSpeed: 20
+--- !u!1 &954617267
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 954617269}
+  - component: {fileID: 954617268}
+  m_Layer: 0
+  m_Name: Enemy Spawner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &954617268
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 954617267}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fafbe7ce766ea934686c8685fb33015d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemyPrefab: {fileID: 1638262136538492, guid: 20f47be39e10cb541a832bb47b34d9bf,
+    type: 2}
+  spawnPointCenter: {x: 0, y: 11, z: 0}
+  spawnBoxSize: {x: 19, y: 2, z: 1}
+--- !u!4 &954617269
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 954617267}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1910809163
 GameObject:
   m_ObjectHideFlags: 0
@@ -3201,7 +3245,7 @@ MonoBehaviour:
   origin: {fileID: 52221653}
   speed: 10
   velocityInheritanceFactor: 0
-  width: 0.1
+  width: 0.2
   colorFactorMultiplier: 0
   wobbleStrength: 0.1
   wobbleSpeed: 10

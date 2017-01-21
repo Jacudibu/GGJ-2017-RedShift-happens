@@ -32,6 +32,19 @@ public class EnemySpawner : MonoBehaviour
         pos.x = Random.Range(spawnPointCenter.x - spawnBoxSize.x * 0.5f, spawnPointCenter.x + spawnBoxSize.x * 0.5f);
         pos.y = Random.Range(spawnPointCenter.y - spawnBoxSize.y * 0.5f, spawnPointCenter.y + spawnBoxSize.y * 0.5f);
 
-        GameObject.Instantiate(enemyPrefab, pos, Quaternion.identity);
+        Enemy lastEnemy = null;
+        int EnemyCount = Random.Range(0, 4);
+        for (int i = 0; i < EnemyCount; i++)
+        {
+            lastEnemy = InstantiateEnemy(pos, i, lastEnemy);
+        }
+    }
+
+    private Enemy InstantiateEnemy(Vector3 position, int layer, Enemy parent)
+    {
+        Enemy enemy = GameObject.Instantiate(enemyPrefab, position, Quaternion.identity).GetComponent<Enemy>();
+        enemy.Init(parent, layer);
+
+        return enemy;
     }
 }

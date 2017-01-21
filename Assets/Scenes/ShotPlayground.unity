@@ -363,8 +363,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   origin: {fileID: 871527068}
   speed: 10
-  velocityInheritanceFactor: 0.2
+  velocityInheritanceFactor: 0
   width: 0.25
+  colorFactorMultiplier: 0
 --- !u!1 &1910809163
 GameObject:
   m_ObjectHideFlags: 0

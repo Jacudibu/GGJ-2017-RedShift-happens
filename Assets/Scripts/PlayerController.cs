@@ -21,6 +21,7 @@ public class PlayerController : MonoBehaviour
 
 
     private const float velocityDeath = 0.01f;
+    private float yRotation;
 
     private Vector3 velocity;
     private Vector3 lastPosition;
@@ -52,7 +53,24 @@ public class PlayerController : MonoBehaviour
             StartCoroutine(Coroutine_CheckIfPlayerStandsStill());
 
         lastPosition = transform.position;
+
+        // RotateInInputDirection();
 	}
+
+    private void RotateInInputDirection()
+    {
+        if (Input.GetAxis("Horizontal") == 0f)
+        {
+            yRotation = yRotation * Time.deltaTime;
+        }
+        else
+        {
+            yRotation += -Input.GetAxis("Horizontal") * Time.deltaTime * 90f;
+            yRotation = Mathf.Clamp(yRotation, -45, 45);
+        }
+
+        transform.rotation = Quaternion.Euler(0f, yRotation, 0f);
+    }
 
     private IEnumerator Coroutine_CheckIfPlayerStandsStill()
     {

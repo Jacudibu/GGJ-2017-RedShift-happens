@@ -2838,6 +2838,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   shifts: 0
+  floatshifts: 0
   speed: 10
   intervalCheckTime: 4
 --- !u!1 &332794264

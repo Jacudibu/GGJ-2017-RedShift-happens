@@ -14,26 +14,42 @@ public class Enemy : MonoBehaviour
     public EnemyColor color;
     public Enemy parentEnemy;
 
-    public int life = 1;
+    public int life = 40;
     public float baseScale = 0.5f;
     [Range(0.5f, 5f)]
     public float speed = 1f;
 
+    private Vector3 defaultScale;
+    private float timeSinceLastHit;
+
+    private float rotationSpeed = 1f;
+
 	void Update ()
     {
-        transform.Translate(0f, -speed * Time.deltaTime, 0f);
+        transform.position = transform.position - new Vector3(0f, speed * Time.deltaTime, 0f);
+
+        float damageScaler = Mathf.Lerp(10f, 1f, life / 40f);
+
+        transform.Rotate(0f, 0f, Time.deltaTime * rotationSpeed);
+        transform.localScale = defaultScale + (Vector3.one * 0.1f * Mathf.Sin(Time.time * damageScaler));
 	}
 
     public void Init(Enemy parent, int layer)
     {
         parentEnemy = parent;
 
-        Vector3 scale = Vector3.one;
-        scale.x += layer;
-        scale.y += layer;
-        scale.z -= layer * 0.2f;
+        defaultScale = Vector3.one * 0.2f;
+        defaultScale.x += layer * 0.25f;
+        defaultScale.y += layer * 0.25f;
 
-        transform.localScale = scale;
+        transform.localScale = defaultScale;
+
+        GetComponent<SpriteRenderer>().sortingOrder = 5 - layer;
+
+        rotationSpeed = Random.Range(45f, 200f);
+
+        // sign
+        rotationSpeed = Random.Range(0, 2) == 0 ? -rotationSpeed : rotationSpeed;
 
         ChangeColor();
     }
@@ -85,11 +101,10 @@ public class Enemy : MonoBehaviour
     {
         if (collision.gameObject.GetComponent<LaserCollider>() != null)
         {
-            Destroy(collision.gameObject);
-
             if (parentEnemy != null)
                 return;
 
+            Destroy(collision.gameObject);
             life--;
 
             if (life == 0)

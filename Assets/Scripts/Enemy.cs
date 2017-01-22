@@ -12,7 +12,6 @@ public enum EnemyColor
 public class Enemy : MonoBehaviour
 {
     public EnemyColor color;
-    public Enemy parentEnemy;
 
     public int life = 40;
     public float baseScale = 0.5f;
@@ -34,10 +33,8 @@ public class Enemy : MonoBehaviour
         transform.localScale = defaultScale + (Vector3.one * 0.1f * Mathf.Sin(Time.time * damageScaler));
 	}
 
-    public void Init(Enemy parent, int layer, float speed)
+    public void Init(int layer, float speed)
     {
-        parentEnemy = parent;
-
         defaultScale = Vector3.one;
         defaultScale.x += layer * 2.5f;
         defaultScale.y += layer * 3f;
@@ -114,25 +111,10 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    public int GetEnemyParentCount()
-    {
-        if (parentEnemy == null)
-        {
-            return 0;
-        }
-        else
-        {
-            return parentEnemy.GetEnemyParentCount();
-        }
-    }
-
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.GetComponent<LaserCollider>() != null)
         {
-            if (parentEnemy != null)
-                return;
-
             Destroy(collision.gameObject);
             life--;
 

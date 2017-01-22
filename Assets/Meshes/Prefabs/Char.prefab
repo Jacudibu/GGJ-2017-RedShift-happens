@@ -40,6 +40,7 @@ GameObject:
   - component: {fileID: 33423404576864232}
   - component: {fileID: 23931529854986716}
   - component: {fileID: 82540524545648342}
+  - component: {fileID: 165110140522375636}
   m_Layer: 0
   m_Name: Char
   m_TagString: Untagged
@@ -688,6 +689,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   revolveSpeed: 3600
+--- !u!165 &165110140522375636
+AudioHighPassFilter:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1131552773109434}
+  m_Enabled: 1
+  m_CutoffFrequency: 150
+  m_HighpassResonanceQ: 1
 --- !u!198 &198861594116003904
 ParticleSystem:
   m_ObjectHideFlags: 1

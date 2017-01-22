@@ -38,14 +38,14 @@ public class EnemySpawner : MonoBehaviour
         int EnemyCount = Random.Range(0, 4);
         for (int i = EnemyCount; i > 0; i--)
         {
-            lastEnemy = InstantiateEnemy(pos, i, lastEnemy, speed);
+            lastEnemy = InstantiateEnemy(pos, i, speed);
         }
     }
 
-    private Enemy InstantiateEnemy(Vector3 position, int layer, Enemy parent, float speed)
+    private Enemy InstantiateEnemy(Vector3 position, int layer, float speed)
     {
         Enemy enemy = GameObject.Instantiate(enemyPrefab, position, Quaternion.identity).GetComponent<Enemy>();
-        enemy.Init(parent, layer, speed);
+        enemy.Init(layer, speed);
 
         return enemy;
     }

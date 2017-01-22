@@ -976,8 +976,8 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "Code\nAldo Brie\xDFmann\nStefan Wolf\n\nArt\nThomas Wellman\n\nMusic\nBartek
-    Trame"
+  m_Text: "Code\nAldo Brie\xDFmann\nStefan Wolf\n\nDesign, Art\nThomas Wellmann\n\nMusic,
+    SFX\nBartek Trame"
 --- !u!222 &1684216791
 CanvasRenderer:
   m_ObjectHideFlags: 0

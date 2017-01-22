@@ -55,9 +55,11 @@ public class PlayerController : MonoBehaviour
         if ((transform.position.x + curVelocity) >= 6f) {
             acceleration = -1*Mathf.Abs(acceleration);
             changedirection = true;
+            curVelocity *= 0.1f;
         } else if ((transform.position.x + curVelocity) <= -6f) {
             acceleration = Mathf.Abs(acceleration);
             changedirection = true;
+            curVelocity *= 0.1f;
         } else if(Input.GetButtonDown("Jump")){
             acceleration *= -1;
             changedirection = true;

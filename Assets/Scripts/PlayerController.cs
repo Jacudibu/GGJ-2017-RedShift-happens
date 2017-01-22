@@ -12,21 +12,28 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    [SerializeField]
+    public float lastDirectionChangeTime = 0f;
+
+    float speedChangeTime = 0f;
+
     public int shifts;
     public float floatshifts;
 
+    float acceleration = 0.05f;
+    float curVelocity = 0f;
+    float maxVelocity = 0.1f;
+    float floatshifttime = 0f;
+
     [SerializeField]
     private float speed;
-    [SerializeField]
-    private float intervalCheckTime = 2f;
-    private float floatIncrease = 10f;
-    private float floatDecrease = 5f;
+
+    //private Vector3 lastChangePosition;
 
     private const float velocityDeath = 0.01f;
     private float yRotation;
 
     private Vector3 velocity;
-    private Vector3 lastPosition;
 
     public delegate void ShiftAction();
     public ShiftAction OnShiftHappens;
@@ -34,39 +41,48 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
-        lastPosition = transform.position;
-
+        //lastChangePosition = transform.position;
+        speedChangeTime = Time.time;
+        floatshifttime = Time.time;
     }
 
-	void Update()
+    void Update()
     {
-        transform.position = transform.position + Vector3.right * Input.GetAxis("Horizontal") * speed * Time.deltaTime;
-
-        Vector3 lastVelocity = velocity;
-        velocity = lastPosition - transform.position;
-
-        if(Mathf.Sign(lastVelocity.x) != Mathf.Sign(velocity.x))
-        {
-            StartCoroutine(Coroutine_CountShift());
-            if (OnShiftHappens != null)
-                OnShiftHappens.Invoke();
+        //transform.position = transform.position + Vector3.right * Input.GetAxis("Horizontal") * speed * Time.deltaTime;
+        // change direction
+        bool changedirection = false;
+        if ((transform.position.x + curVelocity) >= 9.9) {
+            acceleration = -1*Mathf.Abs(acceleration);
+            changedirection = true;
+        } else if ((transform.position.x + curVelocity) <= -9.9) {
+            acceleration = Mathf.Abs(acceleration);
+            changedirection = true;
+        } else if(Input.GetButtonDown("Jump") && (Time.time > lastDirectionChangeTime + 0.1f)){
+            lastDirectionChangeTime = Time.time;
+            acceleration *= -1;
+            changedirection = true;
+            //lastChangePosition = transform.position;
         }
 
-        if (velocity.magnitude < velocityDeath)
-            StartCoroutine(Coroutine_CheckIfPlayerStandsStill());
+        if ((Mathf.Abs(curVelocity+acceleration) < maxVelocity) && (Time.time > speedChangeTime + 0.1f)){
+            curVelocity += acceleration;
+            speedChangeTime = Time.time;
+        }
+        transform.position = transform.position + Vector3.right * curVelocity;
         
-        lastPosition = transform.position;
+        // set floatshifts
+        if (changedirection){
+            floatshifts = Mathf.Min(floatshifts+2f,10f);//0.4f*Mathf.Abs(lastChangePosition.x);
+        } else if (Time.time > floatshifttime + 0.2f){
+            floatshifts = Mathf.Max(floatshifts*0.8f,0.001f);
+            floatshifttime = Time.time;
+        }
+
+        // IMMA DRAWIN MAH LAZOR!!!
+        if (OnNoShiftHappens != null)
+            OnNoShiftHappens.Invoke();
 
         // RotateInInputDirection();
-        
-        if (Mathf.Sign(lastVelocity.x) != Mathf.Sign(velocity.x) && floatshifts < 10) {
-            floatshifts += 10.0f/floatIncrease * Time.deltaTime * 10f;
-        }
-        if (floatshifts > 0.1){
-            floatshifts -= 1.0f/floatDecrease * Time.deltaTime;
-            if (floatshifts < 0)
-                floatshifts = 0;
-        }
     }
 
     private void RotateInInputDirection()
@@ -82,39 +98,5 @@ public class PlayerController : MonoBehaviour
         }
 
         transform.rotation = Quaternion.Euler(0f, yRotation, 0f);
-    }
-
-    private IEnumerator Coroutine_CheckIfPlayerStandsStill()
-    {
-        yield return null;
-        if (velocity.magnitude < velocityDeath)
-        {
-            yield return null;
-            if (velocity.magnitude < velocityDeath)
-            {
-                yield return null;
-                if (velocity.magnitude < velocityDeath)
-                {
-                    yield return null;
-                    if (velocity.magnitude < velocityDeath)
-                    {
-                        shifts = 0;
-                        floatshifts = 0f;
-                        if (OnNoShiftHappens != null)
-                            OnNoShiftHappens.Invoke();
-                    }
-                }
-            }
-        }
-    }
-            
-    private IEnumerator Coroutine_CountShift()
-    {
-        shifts++;
-        yield return new WaitForSeconds(intervalCheckTime);
-        shifts--;
-
-        if (shifts < 0)
-            shifts = 0;
     }
 }

@@ -146,10 +146,14 @@ public class Laser : MonoBehaviour
         normals.Push(-Vector3.forward);
         colors.Push(currentLaserColor);
     }
-    static float normalizationValue = 10f; // maximum value that may be held (/will be accounted for) in the player.shifts variable
+    static float normalizationValue = 10f; // maximum value that may be held (/will be accounted for) in the player.floatshifts variable
 
     static float NORMALIZED_THIRD = normalizationValue/3f;
 
+    [SerializeField]
+    public float normalizedShift = 0f;
+
+    public static Color currentColor = Color.black;
     private void SetLaserColor()
     {
         float red = 0;
@@ -157,12 +161,15 @@ public class Laser : MonoBehaviour
         float blue = 0;
         float alpha = 1;
         
-        float normalizedShift = player.floatshifts/normalizationValue;
+        // should go towards 0 for red and towards 1 for purple
+        normalizedShift = player.floatshifts/normalizationValue;//(player.floatshifts==0?0:(1/player.floatshifts)*normalizationValue);
+
         // calculate red based on normalization
-        if (normalizedShift < 0.01) {
+        if (normalizedShift <= 0.01) {
             red = 0;
         } else if (normalizedShift < 0.2)
         {
+            currentColor = Color.red;
             red = 1; 
         } else if (normalizedShift < 0.5){
             red = Mathf.Cos((normalizedShift - 0.2f) * NORMALIZED_THIRD * Mathf.PI / 2);
@@ -175,9 +182,12 @@ public class Laser : MonoBehaviour
         }
 
         // calculate green
-        if (normalizedShift < 0.2){
+        if (normalizedShift <= 0.01){
+            green = 0;
+        } else if (normalizedShift < 0.2){
             green = 1 - Mathf.Cos(normalizedShift * 5 * Mathf.PI / 2);
         } else if (normalizedShift < 0.6){
+            currentColor = Color.green;
             green = 1;
         } else if (normalizedShift < 0.9){
             green = Mathf.Cos((normalizedShift - 0.6f) * NORMALIZED_THIRD * Mathf.PI / 2);
@@ -191,6 +201,7 @@ public class Laser : MonoBehaviour
         } else if (normalizedShift < 0.6){
             blue = 1 - Mathf.Cos((normalizedShift - 0.3f) * NORMALIZED_THIRD * Mathf.PI / 2);
         } else {
+            currentColor = Color.blue;
             blue = 1;
         }
 
@@ -254,24 +265,23 @@ public class Laser : MonoBehaviour
         while (true)
         {
             yield return new WaitForSeconds(colliderSpawnInterval);
-            SpawnCollider(EnemyColor.GREEN);
-            /*
-            if (currentLaserColor == Color.black)
+            //SpawnCollider(EnemyColor.GREEN);
+            if (currentColor == Color.black)
             {
                 continue;
             }
-            else if (currentLaserColor == Color.green)
+            else if (currentColor == Color.green)
             {
                 SpawnCollider(EnemyColor.GREEN);
             }
-            else if (currentLaserColor == Color.blue)
+            else if (currentColor == Color.blue)
             {
                 SpawnCollider(EnemyColor.BLUE);
             }
-            else if (currentLaserColor == Color.red)
+            else if (currentColor == Color.red)
             {
                 SpawnCollider(EnemyColor.RED);
-            }*/
+            }
         }
     }
 

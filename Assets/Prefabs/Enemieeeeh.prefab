@@ -71,7 +71,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   color: 0
   parentEnemy: {fileID: 0}
-  life: 90
+  life: 30
   baseScale: 0.5
   speed: 1
 --- !u!135 &135702846222479260

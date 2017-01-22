@@ -3468,7 +3468,7 @@ MonoBehaviour:
   origin: {fileID: 871527068}
   speed: 10
   velocityInheritanceFactor: 0
-  width: 10
+  width: 2
   colorFactorMultiplier: 0
   wobbleStrength: 3
   wobbleSpeed: 20

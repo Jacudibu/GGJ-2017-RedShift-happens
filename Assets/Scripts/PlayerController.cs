@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -20,10 +21,14 @@ public class PlayerController : MonoBehaviour
     public int shifts;
     public float floatshifts;
 
+    public int points = 0;
+    public int plHealth = 4;
+    public int curHealth = 4;
+    public int maxHealth = 4;
+
     float acceleration = 0.05f;
     float curVelocity = 0f;
     float maxVelocity = 0.17f;
-    float floatshifttime = 0f;
 
     [SerializeField]
     private float speed;
@@ -43,7 +48,6 @@ public class PlayerController : MonoBehaviour
     {
         lastChangePosition = transform.position;
         speedChangeTime = Time.time;
-        floatshifttime = Time.time;
         lastChangeDistance = transform.position.x;
     }
 
@@ -82,10 +86,31 @@ public class PlayerController : MonoBehaviour
                 OnNoShiftHappens.Invoke();
         } else if (currentDistance > lastChangeDistance){
             floatshifts = Mathf.Max(Mathf.Min(currentDistance,5f), 0.11f);
-            floatshifttime = Time.time;
         // IMMA DRAWIN MAH LAZOR!!!
         if (OnNoShiftHappens != null)
             OnNoShiftHappens.Invoke();
+        }
+        if (plHealth < curHealth){
+            Debug.Log("update loop");
+            GameObject nextObject;
+            if (plHealth == 3){
+                nextObject = GameObject.Find("waves_1");
+                curHealth--;
+                Destroy(nextObject);
+            }
+            if (plHealth == 2){
+                nextObject = GameObject.Find("waves_2");
+                curHealth--;
+                Destroy(nextObject);
+            }
+            if (plHealth == 1){
+                nextObject = GameObject.Find("waves_3");
+                curHealth--;
+                Destroy(nextObject);
+            }
+            if (plHealth < 1){
+                SceneManager.LoadScene(0);
+            }
         }
     }
 

@@ -18,10 +18,15 @@ public class Enemy : MonoBehaviour
     [Range(0.5f, 5f)]
     public float speed = 1f;
 
+    private int playerDamage = 0;
+    private int playerPoints = 0;
+
     private Vector3 defaultScale;
     private float timeSinceLastHit;
 
     private float rotationSpeed = 1f;
+
+    private static PlayerController player;
 
 	void Update ()
     {
@@ -31,7 +36,15 @@ public class Enemy : MonoBehaviour
 
         transform.Rotate(0f, Time.deltaTime * rotationSpeed, 0f);
         transform.localScale = defaultScale + (Vector3.one * 0.1f * Mathf.Sin(Time.time * damageScaler));
-	}
+
+        if (transform.position.y < 1){
+            // enemy is too low, destroy and lower player health
+            Debug.Log("harming player");
+            player.plHealth -= this.playerDamage;
+            // destroy
+            Destroy(gameObject);
+        }
+    }
 
     public void Init(int layer, float speed)
     {
@@ -51,19 +64,30 @@ public class Enemy : MonoBehaviour
             case 3: // red
                 this.life = this.life*2;
                 this.speed = 0.5f*speed;
+                this.playerDamage = 1;
+                this.playerPoints = 10;
                 break;
-            case 2:
+            case 2: // green
                 this.life = (int) (this.life*1.2f);
                 this.speed = 0.8f*speed;
+                this.playerDamage = 1;
+                this.playerPoints = 20;
                 break;
-            default:
+            default:// blue at the moment
                 this.speed = speed;
+                this.playerDamage = 1;
+                this.playerPoints = 30;
                 break;
         }
         // sign
         rotationSpeed = Random.Range(0, 2) == 0 ? -rotationSpeed : rotationSpeed;
 
         ChangeColor(layer);
+
+        // find player if not already done
+        if (player == null){
+            player = FindObjectOfType<PlayerController>();
+        }
     }
 
     private void ChangeColor(int layer)
@@ -126,6 +150,7 @@ public class Enemy : MonoBehaviour
     private void DiePainfully()
     {
         ScreenShaker.cameraInstance.Shake(0.5f, 0.2f);
+        player.points += playerPoints;
         Destroy(gameObject);
     }
 }

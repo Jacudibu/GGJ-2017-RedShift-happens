@@ -64,7 +64,7 @@ public class PlayerController : MonoBehaviour
             acceleration = Mathf.Abs(acceleration);
             changedirection = true;
             curVelocity *= 0.1f;
-        } else if(Input.GetButtonDown("Jump")){
+        } else if(Input.anyKeyDown){
             acceleration *= -1;
             changedirection = true;
         }

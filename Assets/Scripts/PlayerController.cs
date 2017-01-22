@@ -91,7 +91,6 @@ public class PlayerController : MonoBehaviour
             OnNoShiftHappens.Invoke();
         }
         if (plHealth < curHealth){
-            Debug.Log("update loop");
             GameObject nextObject;
             if (plHealth == 3){
                 nextObject = GameObject.Find("waves_1");

@@ -39,7 +39,6 @@ public class Enemy : MonoBehaviour
 
         if (transform.position.y < 1){
             // enemy is too low, destroy and lower player health
-            Debug.Log("harming player");
             player.plHealth -= this.playerDamage;
             // destroy
             Destroy(gameObject);

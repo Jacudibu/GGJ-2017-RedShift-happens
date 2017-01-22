@@ -6,11 +6,11 @@ Material:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: Laz0r
-  m_Shader: {fileID: 4800000, guid: 466466a0175d2e340b26817200194fc0, type: 3}
-  m_ShaderKeywords: _ALPHABLEND_ON _VERTEXCOLOR
+  m_Name: StandardSpecular
+  m_Shader: {fileID: 4800000, guid: e2de4b314457106409da8e620a90a7ce, type: 3}
+  m_ShaderKeywords: _NORMALMAP _SPECGLOSSMAP _VERTEXCOLOR
   m_LightmapFlags: 5
-  m_CustomRenderQueue: 3000
+  m_CustomRenderQueue: -1
   stringTagMap: {}
   m_SavedProperties:
     serializedVersion: 2
@@ -18,7 +18,7 @@ Material:
     - first:
         name: _BumpMap
       second:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: f5baab790477371499d58388584017a5, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - first:
@@ -43,13 +43,13 @@ Material:
         name: _EmissionMap
       second:
         m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
+        m_Scale: {x: 4, y: 4}
         m_Offset: {x: 0, y: 0}
     - first:
         name: _MainTex
       second:
-        m_Texture: {fileID: 2800000, guid: adb20d69a5e8a8a48a1dfb45c4994095, type: 3}
-        m_Scale: {x: 1, y: 1}
+        m_Texture: {fileID: 2800000, guid: 1223b34f95ccef140988a60b68c87c0a, type: 3}
+        m_Scale: {x: 4, y: 4}
         m_Offset: {x: 0, y: 0}
     - first:
         name: _MetallicGlossMap
@@ -69,6 +69,12 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - first:
+        name: _SpecGlossMap
+      second:
+        m_Texture: {fileID: 2800000, guid: 57b2585fca985ab47b6f30b68f994c71, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     m_Floats:
     - first:
         name: _BumpScale
@@ -81,28 +87,22 @@ Material:
       second: 1
     - first:
         name: _DstBlend
-      second: 10
+      second: 0
     - first:
         name: _EmissionScaleUI
       second: 0
     - first:
-        name: _GlossMapScale
-      second: 1
-    - first:
         name: _Glossiness
-      second: 0
-    - first:
-        name: _GlossyReflections
-      second: 1
+      second: 0.5
     - first:
         name: _IntensityVC
       second: 1
     - first:
         name: _Metallic
-      second: 1
+      second: 0
     - first:
         name: _Mode
-      second: 2
+      second: 0
     - first:
         name: _OcclusionStrength
       second: 1
@@ -110,20 +110,14 @@ Material:
         name: _Parallax
       second: 0.02
     - first:
-        name: _SmoothnessTextureChannel
-      second: 0
-    - first:
-        name: _SpecularHighlights
-      second: 1
-    - first:
         name: _SrcBlend
-      second: 5
+      second: 1
     - first:
         name: _UVSec
       second: 0
     - first:
         name: _ZWrite
-      second: 0
+      second: 1
     m_Colors:
     - first:
         name: _Color
@@ -134,3 +128,6 @@ Material:
     - first:
         name: _EmissionColorUI
       second: {r: 1, g: 1, b: 1, a: 1}
+    - first:
+        name: _SpecColor
+      second: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}

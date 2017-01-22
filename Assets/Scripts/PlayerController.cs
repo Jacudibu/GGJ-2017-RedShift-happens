@@ -108,6 +108,8 @@ public class PlayerController : MonoBehaviour
                 Destroy(nextObject);
             }
             if (plHealth < 1){
+				nextObject = GameObject.Find("Music");
+				Destroy(nextObject);
                 SceneManager.LoadScene(0);
             }
         }

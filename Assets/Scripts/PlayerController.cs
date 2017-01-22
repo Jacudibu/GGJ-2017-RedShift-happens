@@ -22,7 +22,7 @@ public class PlayerController : MonoBehaviour
 
     float acceleration = 0.05f;
     float curVelocity = 0f;
-    float maxVelocity = 0.15f;
+    float maxVelocity = 0.17f;
     float floatshifttime = 0f;
 
     [SerializeField]
@@ -57,12 +57,12 @@ public class PlayerController : MonoBehaviour
         } else if ((transform.position.x + curVelocity) <= -6f) {
             acceleration = Mathf.Abs(acceleration);
             changedirection = true;
-        } else if(Input.GetButtonDown("Jump") && (Time.time > lastDirectionChangeTime + 0.1f)){
+        } else if(Input.GetButtonDown("Jump")){// && (Time.time > lastDirectionChangeTime + 0.1f)){
             acceleration *= -1;
             changedirection = true;
         }
 
-        if ((Mathf.Abs(curVelocity+acceleration) < maxVelocity) && (Time.time > speedChangeTime + 0.1f)){
+        if ((Mathf.Abs(curVelocity+acceleration) < maxVelocity) && (Time.time > speedChangeTime + 0.00025f)){
             curVelocity += acceleration;
             speedChangeTime = Time.time;
         }

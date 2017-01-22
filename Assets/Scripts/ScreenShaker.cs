@@ -3,6 +3,8 @@ using System.Collections;
 
 public class ScreenShaker : MonoBehaviour
 {
+    public static ScreenShaker cameraInstance;
+
     private float duration;
     private float magnitude;
     private Transform screenShakeParent;
@@ -10,6 +12,10 @@ public class ScreenShaker : MonoBehaviour
     private void Awake()
     {
         GameObject newObj = new GameObject("ScreenShake CameraParent");
+
+        if (GetComponentInChildren<Camera>() != null)
+            cameraInstance = this;
+
         screenShakeParent = newObj.transform;
 
         transform.parent = screenShakeParent;

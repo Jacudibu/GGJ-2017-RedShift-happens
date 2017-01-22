@@ -143,6 +143,7 @@ public class Enemy : MonoBehaviour
 
     private void DiePainfully()
     {
+        ScreenShaker.cameraInstance.Shake(0.5f, 0.2f);
         Destroy(gameObject);
     }
 }

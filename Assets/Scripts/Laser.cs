@@ -26,6 +26,9 @@ public class Laser : MonoBehaviour
     [Range(1, 10)]
     private float colorFactorMultiplier;
 
+    [Header("Shoot FX")]
+    public float speedToReachFullWidth = 22.5f;
+
     [Header("Wobble FX")]
     public float wobbleStrength = 0.5f;
     public float wobbleSpeed = 10f;
@@ -117,13 +120,16 @@ public class Laser : MonoBehaviour
 
     public void AddNewVertices()
     {
-        float fatness = widthHalfed;
+        float fatness = width * 0.1f;
 
         AddVertex(origin.position - Vector3.right * fatness);
+
         lastLeftIndex = vertices.IndexOfLastItemAdded;
 
         AddVertex(origin.position + Vector3.right * fatness);
         lastRightIndex = vertices.IndexOfLastItemAdded;
+
+        StartCoroutine(ScaleThoseFuckingVertices(lastLeftIndex, lastRightIndex));
 
         mesh.vertices = vertices.Content;
         mesh.triangles = triangles.Content;
@@ -302,5 +308,26 @@ public class Laser : MonoBehaviour
         }
 
         coll.GetComponent<LaserCollider>().Init(speed);
+    }
+
+    private IEnumerator ScaleThoseFuckingVertices(int leftArrayPos, int rightArrayPos)
+    {
+        float t = 0;
+        while (t < 1)
+        {
+            Vector3 vLeft = vertices.Content[leftArrayPos];
+            Vector3 vRight = vertices.Content[rightArrayPos];
+
+            float distance = Time.deltaTime * speedToReachFullWidth;
+
+            vLeft.x -= distance * widthHalfed;
+            vRight.x += distance * widthHalfed;
+
+            vertices.Content[leftArrayPos] = vLeft;
+            vertices.Content[rightArrayPos] = vRight;
+
+            t += Time.deltaTime * speedToReachFullWidth;
+            yield return null;
+        }
     }
 }

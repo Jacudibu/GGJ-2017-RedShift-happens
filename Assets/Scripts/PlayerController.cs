@@ -44,11 +44,12 @@ public class PlayerController : MonoBehaviour
         lastChangePosition = transform.position;
         speedChangeTime = Time.time;
         floatshifttime = Time.time;
+        lastChangeDistance = transform.position.x;
     }
 
+    private float lastChangeDistance = 0f;
     void Update()
     {
-        //transform.position = transform.position + Vector3.right * Input.GetAxis("Horizontal") * speed * Time.deltaTime;
         // change direction
         bool changedirection = false;
         if ((transform.position.x + curVelocity) >= 6f) {
@@ -57,7 +58,7 @@ public class PlayerController : MonoBehaviour
         } else if ((transform.position.x + curVelocity) <= -6f) {
             acceleration = Mathf.Abs(acceleration);
             changedirection = true;
-        } else if(Input.GetButtonDown("Jump")){// && (Time.time > lastDirectionChangeTime + 0.1f)){
+        } else if(Input.GetButtonDown("Jump")){
             acceleration *= -1;
             changedirection = true;
         }
@@ -67,25 +68,23 @@ public class PlayerController : MonoBehaviour
             speedChangeTime = Time.time;
         }
         transform.position = transform.position + Vector3.right * curVelocity;
-        
+        float currentDistance = Mathf.Abs(transform.position.x - lastChangePosition.x);
         // set floatshifts
         if (changedirection){
-            floatshifts = Mathf.Min(floatshifts+.8f*(Time.time - lastDirectionChangeTime), 10f);
-            //0.4f*Mathf.Abs(lastChangePosition.x);*Mathf.Abs(lastChangePosition.x - transform.position.x)
+            floatshifts = Mathf.Max(Mathf.Min(currentDistance, 5f), 0.11f);
+            lastChangeDistance = currentDistance;
             lastChangePosition = transform.position;
             lastDirectionChangeTime = Time.time;
-        } else if (Time.time > floatshifttime + 0.1f){
-            //floatshifts = Mathf.Max(floatshifts * 0.8f, 0.11f);
-            floatshifts = Mathf.Max(floatshifts - 0.5f*Mathf.Pow(Time.time - lastDirectionChangeTime, 2)
-            , 0.11f);
+            // IMMA DRAWIN MAH LAZOR!!!
+            if (OnNoShiftHappens != null)
+                OnNoShiftHappens.Invoke();
+        } else if (currentDistance > lastChangeDistance){
+            floatshifts = Mathf.Max(Mathf.Min(currentDistance,5f), 0.11f);
             floatshifttime = Time.time;
-        }
-
         // IMMA DRAWIN MAH LAZOR!!!
         if (OnNoShiftHappens != null)
             OnNoShiftHappens.Invoke();
-
-        // RotateInInputDirection();
+        }
     }
 
     private void RotateInInputDirection()

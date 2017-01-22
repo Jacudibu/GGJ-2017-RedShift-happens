@@ -152,7 +152,7 @@ public class Laser : MonoBehaviour
         normals.Push(-Vector3.forward);
         colors.Push(currentLaserColor);
     }
-    static float normalizationValue = 10f; // maximum value that may be held (/will be accounted for) in the player.floatshifts variable
+    static float normalizationValue = 5f; // maximum value that may be held (/will be accounted for) in the player.floatshifts variable
 
     static float NORMALIZED_THIRD = normalizationValue/3f;
 
@@ -169,7 +169,7 @@ public class Laser : MonoBehaviour
 		Renderer renderer = GetComponent<Renderer>();
         
         // should go towards 0 for red and towards 1 for purple
-        normalizedShift = player.floatshifts/normalizationValue;//(player.floatshifts==0?0:(1/player.floatshifts)*normalizationValue);
+        normalizedShift = (5.1f-player.floatshifts)/normalizationValue;//(player.floatshifts==0?0:(1/player.floatshifts)*normalizationValue);
 
         // calculate red based on normalization
         if (normalizedShift <= 0.01) {

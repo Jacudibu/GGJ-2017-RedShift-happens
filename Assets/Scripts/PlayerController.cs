@@ -22,13 +22,13 @@ public class PlayerController : MonoBehaviour
 
     float acceleration = 0.05f;
     float curVelocity = 0f;
-    float maxVelocity = 0.1f;
+    float maxVelocity = 0.15f;
     float floatshifttime = 0f;
 
     [SerializeField]
     private float speed;
 
-    //private Vector3 lastChangePosition;
+    private Vector3 lastChangePosition;
 
     private const float velocityDeath = 0.01f;
     private float yRotation;
@@ -41,7 +41,7 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
-        //lastChangePosition = transform.position;
+        lastChangePosition = transform.position;
         speedChangeTime = Time.time;
         floatshifttime = Time.time;
     }
@@ -51,17 +51,15 @@ public class PlayerController : MonoBehaviour
         //transform.position = transform.position + Vector3.right * Input.GetAxis("Horizontal") * speed * Time.deltaTime;
         // change direction
         bool changedirection = false;
-        if ((transform.position.x + curVelocity) >= 9.9) {
+        if ((transform.position.x + curVelocity) >= 6f) {
             acceleration = -1*Mathf.Abs(acceleration);
             changedirection = true;
-        } else if ((transform.position.x + curVelocity) <= -9.9) {
+        } else if ((transform.position.x + curVelocity) <= -6f) {
             acceleration = Mathf.Abs(acceleration);
             changedirection = true;
         } else if(Input.GetButtonDown("Jump") && (Time.time > lastDirectionChangeTime + 0.1f)){
-            lastDirectionChangeTime = Time.time;
             acceleration *= -1;
             changedirection = true;
-            //lastChangePosition = transform.position;
         }
 
         if ((Mathf.Abs(curVelocity+acceleration) < maxVelocity) && (Time.time > speedChangeTime + 0.1f)){
@@ -72,9 +70,14 @@ public class PlayerController : MonoBehaviour
         
         // set floatshifts
         if (changedirection){
-            floatshifts = Mathf.Min(floatshifts+2f,10f);//0.4f*Mathf.Abs(lastChangePosition.x);
-        } else if (Time.time > floatshifttime + 0.2f){
-            floatshifts = Mathf.Max(floatshifts*0.8f,0.001f);
+            floatshifts = Mathf.Min(floatshifts+.8f*(Time.time - lastDirectionChangeTime), 10f);
+            //0.4f*Mathf.Abs(lastChangePosition.x);*Mathf.Abs(lastChangePosition.x - transform.position.x)
+            lastChangePosition = transform.position;
+            lastDirectionChangeTime = Time.time;
+        } else if (Time.time > floatshifttime + 0.1f){
+            //floatshifts = Mathf.Max(floatshifts * 0.8f, 0.11f);
+            floatshifts = Mathf.Max(floatshifts - 0.5f*Mathf.Pow(Time.time - lastDirectionChangeTime, 2)
+            , 0.11f);
             floatshifttime = Time.time;
         }
 

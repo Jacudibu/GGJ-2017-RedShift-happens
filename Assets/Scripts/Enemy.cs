@@ -30,7 +30,7 @@ public class Enemy : MonoBehaviour
 
         float damageScaler = Mathf.Lerp(10f, 1f, life / 40f);
 
-        transform.Rotate(0f, 0f, Time.deltaTime * rotationSpeed);
+        transform.Rotate(0f, Time.deltaTime * rotationSpeed, 0f);
         transform.localScale = defaultScale + (Vector3.one * 0.1f * Mathf.Sin(Time.time * damageScaler));
 	}
 
@@ -38,28 +38,54 @@ public class Enemy : MonoBehaviour
     {
         parentEnemy = parent;
 
-        defaultScale = Vector3.one * 0.2f;
-        defaultScale.x += layer * 0.25f;
-        defaultScale.y += layer * 0.25f;
+        defaultScale = Vector3.one;
+        defaultScale.x += layer * 2.5f;
+        defaultScale.y += layer * 3f;
+        defaultScale.z += layer * 2.5f;
 
         transform.localScale = defaultScale;
 
-        GetComponent<SpriteRenderer>().sortingOrder = 5 - layer;
+        //GetComponent<SpriteRenderer>().sortingOrder = 5 - layer;
+        GetComponent<MeshRenderer>().sortingOrder = 5 - layer;
 
-        rotationSpeed = Random.Range(45f, 200f);
-        this.speed = speed;
+        rotationSpeed = Random.Range(45f, 100f);
+        //this.speed = speed;
+        switch (layer){
+            case 3: // red
+                this.life = this.life*2;
+                this.speed = 0.5f*speed;
+                break;
+            case 2:
+                this.life = (int) (this.life*1.2f);
+                this.speed = 0.8f*speed;
+                break;
+            default:
+                this.speed = speed;
+                break;
+        }
         // sign
         rotationSpeed = Random.Range(0, 2) == 0 ? -rotationSpeed : rotationSpeed;
 
-        ChangeColor();
+        ChangeColor(layer);
     }
 
-    private void ChangeColor()
+    private void ChangeColor(int layer)
     {
-        do
-        {
-            color = (EnemyColor) Random.Range(0, 3);
-        } while (parentEnemy != null && parentEnemy.color == this.color);
+        //do
+        //{
+        //    color = (EnemyColor) Random.Range(0, 3);
+        //} while (parentEnemy != null && parentEnemy.color == this.color);
+        switch(layer){
+            case 1:
+                color= EnemyColor.BLUE;
+                break;
+            case 2:
+                color= EnemyColor.GREEN;
+                break;
+            case 3:
+                color= EnemyColor.RED;
+                break;
+        }
         ApplyColor();
     }
 
@@ -71,15 +97,18 @@ public class Enemy : MonoBehaviour
         switch (color)
         {
             case EnemyColor.BLUE:
-                renderer.material.color = Color.blue;
+                renderer.material.SetColor("_Color", Color.blue);
+                renderer.material.SetColor("_EmissionColor", Color.blue);
                 gameObject.layer = LayerMask.NameToLayer("BLUE");
                 break;
             case EnemyColor.RED:
-                renderer.material.color = Color.red;
+                renderer.material.SetColor("_Color", Color.red);
+                renderer.material.SetColor("_EmissionColor", Color.red);
                 gameObject.layer = LayerMask.NameToLayer("RED");
                 break;
             case EnemyColor.GREEN:
-                renderer.material.color = Color.green;
+                renderer.material.SetColor("_Color", Color.green);
+                renderer.material.SetColor("_EmissionColor", Color.green);
                 gameObject.layer = LayerMask.NameToLayer("GREEN");
                 break;
         }

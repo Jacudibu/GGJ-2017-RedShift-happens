@@ -166,6 +166,7 @@ public class Laser : MonoBehaviour
         float green = 0;
         float blue = 0;
         float alpha = 1;
+		Renderer renderer = GetComponent<Renderer>();
         
         // should go towards 0 for red and towards 1 for purple
         normalizedShift = player.floatshifts/normalizationValue;//(player.floatshifts==0?0:(1/player.floatshifts)*normalizationValue);
@@ -212,7 +213,10 @@ public class Laser : MonoBehaviour
         }
 
         // set currentLaserColor
-        currentLaserColor = new Color(red, green, blue, alpha);
+		Color newLaserColor = new Color(red, green, blue, alpha);
+        currentLaserColor = newLaserColor;
+		renderer.material.SetColor("_Color", newLaserColor);
+        renderer.material.SetColor("_EmissionColor", newLaserColor);
     }
 
     private void ApplyVelocities()

@@ -112,7 +112,7 @@ public class Laser : MonoBehaviour
     {
         ApplyVelocities();
         AddNewVertices();
-        //SetupUVs();
+        SetupUVs();
     }
 
     public void AddNewVertices()

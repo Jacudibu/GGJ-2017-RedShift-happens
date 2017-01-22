@@ -3470,6 +3470,7 @@ MonoBehaviour:
   velocityInheritanceFactor: 0
   width: 2
   colorFactorMultiplier: 0
+  speedToReachFullWidth: 22.5
   wobbleStrength: 3
   wobbleSpeed: 20
   spawnColliders: 0
@@ -3558,30 +3559,6 @@ Prefab:
     - target: {fileID: 4911181456442378, guid: 9c7dee4b50fb5124987cede685ccd52c, type: 2}
       propertyPath: m_RootOrder
       value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 4911181456442378, guid: 9c7dee4b50fb5124987cede685ccd52c, type: 2}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4911181456442378, guid: 9c7dee4b50fb5124987cede685ccd52c, type: 2}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4911181456442378, guid: 9c7dee4b50fb5124987cede685ccd52c, type: 2}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: -90
-      objectReference: {fileID: 0}
-    - target: {fileID: 4911181456442378, guid: 9c7dee4b50fb5124987cede685ccd52c, type: 2}
-      propertyPath: m_LocalScale.y
-      value: 0.25
-      objectReference: {fileID: 0}
-    - target: {fileID: 4911181456442378, guid: 9c7dee4b50fb5124987cede685ccd52c, type: 2}
-      propertyPath: m_LocalScale.z
-      value: 0.25
-      objectReference: {fileID: 0}
-    - target: {fileID: 4911181456442378, guid: 9c7dee4b50fb5124987cede685ccd52c, type: 2}
-      propertyPath: m_LocalScale.x
-      value: 0.25
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 9c7dee4b50fb5124987cede685ccd52c, type: 2}
@@ -3799,6 +3776,7 @@ MonoBehaviour:
   velocityInheritanceFactor: 0
   width: 0.2
   colorFactorMultiplier: 0
+  speedToReachFullWidth: 22.5
   wobbleStrength: 0.1
   wobbleSpeed: 10
   spawnColliders: 1
